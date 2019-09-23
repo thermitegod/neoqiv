@@ -313,7 +313,7 @@ static int check_extension(const char *name)
 
     if (extn)
         for (i = 0; image_extensions[i]; i++)
-            if (strcasecmp(extn, image_extensions[i]) == 0)
+            if (strcmp(extn, image_extensions[i]) == 0)
                 return 1;
 
     return 0;
@@ -330,7 +330,7 @@ static int check_magic(magic_t cookie, const char *name)
     if (description)
     {
         for (i = 0; image_magic[i]; i++)
-            if (strncasecmp(description, image_magic[i], strlen(image_magic[i])) == 0)
+            if (strcmp(description, image_magic[i]) == 0)
             {
                 ret = 1;
                 break;
