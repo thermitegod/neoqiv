@@ -13,11 +13,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <libgen.h>
-#ifdef HAVE_GETOPT_LONG
 #include <getopt.h>
-#else
-#include "lib/getopt.h"
-#endif
 #include "xmalloc.h"
 
 extern char *optarg;

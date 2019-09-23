@@ -26,9 +26,6 @@ FILTER = 1
 # so some extensions (XBM TGA) have been removed.
 EXTNS = GIF TIFF XPM PNG PPM PNM PGM PCX BMP EIM JPEG SVG WMF ICO
 
-# Comment this line out if your system doesn't have getopt_long().
-GETOPT_LONG = -DHAVE_GETOPT_LONG
-
 # This program will be run on the manual page after it is installed.
 # If you don't want to compress the manpage, change it to 'true'.
 COMPRESS_PROG = gzip -9f
@@ -42,7 +39,7 @@ LCMS = -DSUPPORT_LCMS
 MAGIC = -DHAVE_MAGIC
 
 # Comment this line out if you do not want to use libexif to
-# display the exif contents of a jpg 
+# display the exif contents of a jpg
 EXIF = -DHAVE_EXIF
 
 ######################################################################
@@ -78,7 +75,6 @@ PROGRAM   = qiv
 OBJS      = main.o image.o event.o options.o utils.o xmalloc.o
 HEADERS   = qiv.h
 DEFINES   = $(patsubst %,-DEXTN_%, $(EXTNS)) \
-            $(GETOPT_LONG) \
             -DSTATUSBAR_FONT='$(STATUSBAR_FONT)' \
             -DCOMMENT_FONT='$(COMMENT_FONT)' \
             -DCENTER=$(CENTER) \
@@ -87,11 +83,6 @@ DEFINES   = $(patsubst %,-DEXTN_%, $(EXTNS)) \
             $(MAGIC) \
             $(EXIF) \
             $(LCMS)
-
-ifndef GETOPT_LONG
-OBJS     += lib/getopt.o lib/getopt1.o
-OBJS_G   += lib/getopt.g lib/getopt1.g
-endif
 
 ifdef LCMS
 INCLUDES  += $(shell $(PKG_CONFIG) --cflags lcms2)
