@@ -23,7 +23,6 @@ static void setup_win(qiv_image *);
 static int used_masks_before = 0;
 static struct timeval load_before, load_after;
 static double load_elapsed;
-static GdkCursor *cursor, *visible_cursor, *invisible_cursor;
 
 Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
 {
@@ -298,8 +297,6 @@ void qiv_load_image(qiv_image *q)
     //    }
 }
 
-static gchar blank_cursor[1];
-
 static void setup_imlib_for_drawable(GdkDrawable *d)
 {
     imlib_context_set_dither(1); /* dither for depths < 24bpp */
@@ -332,8 +329,6 @@ static void setup_imlib_color_modifier(qiv_color_modifier q)
 static void setup_win(qiv_image *q)
 {
     GdkWindowAttr attr;
-    GdkPixmap *cursor_pixmap;
-    static GList icon_list = {NULL, NULL, NULL};
 
     destroy_image(q);
 
@@ -389,26 +384,12 @@ static void setup_win(qiv_image *q)
 
         //    q->win = gdk_window_new(NULL, &attr, GDK_WA_X|GDK_WA_Y|GDK_WA_TYPE_HINT);
         q->win = gdk_window_new(NULL, &attr, GDK_WA_X | GDK_WA_Y);
-        gdk_window_set_cursor(q->win, cursor);
         if (!(to_root || to_root_t || to_root_s))
         {
             gdk_window_fullscreen(q->win);
             gdk_window_show(q->win);
         }
     }
-
-    /* this is all done only once */
-    if (icon_list.data == NULL)
-    {
-        icon_list.data = gdk_pixbuf_new_from_inline(-1, qiv_icon, FALSE, NULL);
-        cursor_pixmap = gdk_bitmap_create_from_data(q->win, blank_cursor, 1, 1);
-        invisible_cursor =
-            gdk_cursor_new_from_pixmap(cursor_pixmap, cursor_pixmap, &text_bg, &text_bg, 0, 0);
-        cursor = visible_cursor = gdk_cursor_new(CURSOR);
-    }
-
-    gdk_window_set_icon_list(q->win, &icon_list);
-    gdk_window_set_cursor(q->win, cursor);
 
     q->bg_gc = gdk_gc_new(q->win);
     q->text_gc = gdk_gc_new(q->win); /* black is default */
@@ -419,18 +400,6 @@ static void setup_win(qiv_image *q)
     gdk_gc_set_foreground(q->comment_gc, &comment_bg);
 
     setup_imlib_for_drawable(GDK_DRAWABLE(q->win));
-}
-
-void hide_cursor(qiv_image *q)
-{
-    if (cursor != invisible_cursor)
-        gdk_window_set_cursor(q->win, cursor = invisible_cursor);
-}
-
-void show_cursor(qiv_image *q)
-{
-    if (cursor != visible_cursor)
-        gdk_window_set_cursor(q->win, cursor = visible_cursor);
 }
 
 /* set image as background */

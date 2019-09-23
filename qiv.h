@@ -214,8 +214,6 @@ extern void reset_mod(qiv_image *);
 extern void destroy_image(qiv_image *q);
 extern void center_image(qiv_image *q);
 extern void correct_image_position(qiv_image *q);
-extern void hide_cursor(qiv_image *q);
-extern void show_cursor(qiv_image *q);
 extern void setup_magnify(qiv_image *, qiv_mgl *); // [lc]
 extern void update_magnify(qiv_image *, qiv_mgl *, int, gint, gint); // [lc]
 

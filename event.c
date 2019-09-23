@@ -20,7 +20,6 @@ static int jumping;
 static int extcommand; // [lc]
 static char jcmd[100];
 static int jidx;
-static int cursor_timeout;
 static gboolean displaying_textwindow = FALSE;
 
 static void qiv_enable_mouse_events(qiv_image *q)
@@ -31,33 +30,6 @@ static void qiv_enable_mouse_events(qiv_image *q)
 static void qiv_disable_mouse_events(qiv_image *q)
 {
     gdk_window_set_events(q->win, gdk_window_get_events(q->win) | GDK_POINTER_MOTION_HINT_MASK);
-}
-
-static gboolean qiv_cursor_timeout(gpointer data)
-{
-    qiv_image *q = data;
-
-    cursor_timeout = 0;
-    hide_cursor(q);
-    qiv_enable_mouse_events(q);
-    return FALSE;
-}
-
-static void qiv_set_cursor_timeout(qiv_image *q)
-{
-    if (!cursor_timeout)
-        cursor_timeout = g_timeout_add(1000, qiv_cursor_timeout, q);
-    qiv_disable_mouse_events(q);
-}
-
-static void qiv_cancel_cursor_timeout(qiv_image *q)
-{
-    hide_cursor(q);
-    if (cursor_timeout)
-    {
-        g_source_remove(cursor_timeout);
-        cursor_timeout = 0;
-    }
 }
 
 static void qiv_drag_image(qiv_image *q, int move_to_x, int move_to_y, const char *action_msg,
@@ -198,7 +170,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
     case GDK_EXPOSE:
         if (!q->exposed)
         {
-            qiv_set_cursor_timeout(q);
             if (center)
                 center_image(q);
         }
@@ -247,7 +218,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
 
     case GDK_BUTTON_PRESS:
         jumping = 0; /* abort jump mode if a button is pressed */
-        qiv_cancel_cursor_timeout(q);
         if (fullscreen && ev->button.button == 1)
         {
             q->drag = 1;
@@ -271,7 +241,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
             {
                 /* distinguish from simple mouse click... */
                 q->drag = 2;
-                show_cursor(q);
             }
             if (q->drag > 1 &&
                 (q->win_x != q->drag_win_x + move_x || q->win_y != q->drag_win_y + move_y))
@@ -299,7 +268,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
         }
         else
         {
-            show_cursor(q);
             // printf(" motion_notify magnify %d  is_hint %d\n", magnify, ev->motion.is_hint);
             if (magnify && !fullscreen)
             {
@@ -310,10 +278,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
                     update_magnify(q, &magnify_img, REDRAW, xcur, ycur); // [lc]
                 }
                 // update_magnify(q, &magnify_img,REDRAW, ev->motion.x,  ev->motion.y);
-            }
-            else
-            {
-                qiv_set_cursor_timeout(q);
             }
         }
         break;
@@ -336,7 +300,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
                 move_x = (int)(ev->button.x_root - q->drag_start_x);
                 move_y = (int)(ev->button.y_root - q->drag_start_y);
                 qiv_disable_mouse_events(q);
-                qiv_set_cursor_timeout(q);
 
                 if (q->drag > 1)
                 {
@@ -392,7 +355,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
     case GDK_KEY_PRESS:
 
         exit_slideshow = TRUE; /* Abort slideshow on any key by default */
-        qiv_cancel_cursor_timeout(q);
 #ifdef DEBUG
         g_print("*** key:\n"); /* display key-codes */
         g_print("\tstring: %s\n", ev->key.string);
@@ -526,7 +488,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
             case 'f':
                 exit_slideshow = FALSE;
                 gdk_window_withdraw(q->win);
-                show_cursor(q);
                 fullscreen ^= 1;
                 first = 1;
                 qiv_load_image(q);
@@ -603,8 +564,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
                 if (fullscreen)
                 {
                     gdk_window_withdraw(q->win);
-                    show_cursor(q);
-                    qiv_set_cursor_timeout(q);
                     fullscreen = 0;
                     first = 1;
                     qiv_load_image(q);
