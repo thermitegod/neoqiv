@@ -619,7 +619,13 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
             case GDK_KEY_Left:
             case GDK_KEY_KP_4:
             case GDK_KEY_KP_Left:
-                if (fullscreen)
+                if (!fullscreen)
+                {
+                    snprintf(infotext, sizeof infotext, "(Previous picture)");
+                    next_image(-1);
+                    qiv_load_image(q);
+                }
+                else if (fullscreen)
                 {
                     if (ev->key.state & GDK_SHIFT_MASK || ev->key.keyval == GDK_KEY_KP_4)
                     {
@@ -635,11 +641,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
                     qiv_drag_image(q, q->win_x + move_step, q->win_y, "(Moving right)",
                                    "(Cannot move further right)");
                 }
-                else
-                {
-                    snprintf(infotext, sizeof infotext, "(Moving works only in fullscreen mode)");
-                    fprintf(stdout, "qiv: Moving works only in fullscreen mode\n");
-                }
                 break;
 
                 /* move image left */
@@ -647,7 +648,13 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
             case GDK_KEY_Right:
             case GDK_KEY_KP_6:
             case GDK_KEY_KP_Right:
-                if (fullscreen)
+                if (!fullscreen)
+                {
+                    snprintf(infotext, sizeof infotext, "(Next picture)");
+                    next_image(1);
+                    qiv_load_image(q);
+                }
+                else if (fullscreen)
                 {
                     if (ev->key.state & GDK_SHIFT_MASK || ev->key.keyval == GDK_KEY_KP_6)
                     {
@@ -662,11 +669,6 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
 
                     qiv_drag_image(q, q->win_x - move_step, q->win_y, "(Moving left)",
                                    "(Cannot move further left)");
-                }
-                else
-                {
-                    snprintf(infotext, sizeof infotext, "(Moving works only in fullscreen mode)");
-                    fprintf(stdout, "qiv: Moving works only in fullscreen mode\n");
                 }
                 break;
 
