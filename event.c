@@ -929,6 +929,7 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
 
                 /* Undelete image */
             case 'u':
+            case GDK_KEY_End:
                 if (!readonly && !trashbin)
                 {
                     if (undelete_image() == 0)
