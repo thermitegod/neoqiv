@@ -52,7 +52,7 @@ int statusbar_fullscreen = 1; // TRUE if statusbar in fullscreen is turned on (d
 int statusbar_window = 0; // FALSE if statusbar in window is turned off (default)
 int comment_window = 0; // FALSE if comment in window is turned off (default)
 int slide; // 1=slide show running
-int scale_down; // resize down if image x/y > screen
+int scale_down = 1; // resize down if image x/y > screen
 int recursive; // descend recursively
 int followlinks; // follow symlinks to dirs
 int to_root; // display on root (centered)
@@ -68,7 +68,7 @@ int zoom_factor = 0; // zoom factor/off
 int watch_file = 0; // watch current files Timestamp, reload if changed
 int magnify = 0; //[lc]
 int user_screen = 0; // preferred (by user) monitor
-int browse = 0; // scan directory of file for browsing
+int browse = 1; // scan directory of file for browsing
 int autorotate = 1; // autorotate JPEGs according to EXIF tag
 int rotation = 0; // rotation x degrees clockwise, 1=90degrees 2=180degrees 3=270degrees
 int vikeys = 0; // option to give us some vi-like keys (for movement)
