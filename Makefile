@@ -12,7 +12,7 @@ COMMENT_FONT = "Monospace 20"
 
 # Cursor to use on qiv windows - see
 # /usr/X11R6/include/X11/cursorfont.h for more choices.
-CURSOR = 84
+#CURSOR = 84
 
 # Should image be centered on screen by default? 1=yes, 0=no.
 CENTER = 1
@@ -51,25 +51,25 @@ ifeq ($(origin CC),default)
 CC = gcc
 endif
 
-PKG_CONFIG ?= pkg-config
-#CFLAGS    = -O0 -g -Wall
-CFLAGS    = -O2 -Wall \
-	    -fcaller-saves -ffast-math -fno-strength-reduce \
-	    -fthread-jumps #-march=pentium #-DSTAT_MACROS_BROKEN
-#CFLAGS    = -O2 -Wall -fomit-frame-pointer -finline-functions \
-#	    -fcaller-saves -ffast-math -fno-strength-reduce \
-#	    -fthread-jumps #-march=pentium #-DSTAT_MACROS_BROKEN
+
+PKG_CONFIG = $(shell which pkg-config)
+
+#CFLAGS    = -O0 -g -Wall -std=c18 -D_DEFAULT_SOURCE
+
+CFLAGS    = -O2 -Wall -std=c18 -D_DEFAULT_SOURCE \
+            -fcaller-saves -ffast-math -fno-strength-reduce \
+            -fthread-jumps -Wno-format-truncation
+
+#CFLAGS    = -O2 -Wall -std=c18 -D_DEFAULT_SOURCE \
+#           -fomit-frame-pointer -finline-functions \
+#           -fcaller-saves -ffast-math -fno-strength-reduce \
+#           -fthread-jumps
+
+#INCLUDES  := $(shell $(PKG_CONFIG) --cflags gdk-3.0 imlib2)
+#LIBS      := $(shell $(PKG_CONFIG) --libs gdk-3.0 imlib2) -lX11 -lXext -lgio-2.0
 
 INCLUDES  := $(shell $(PKG_CONFIG) --cflags gdk-2.0 imlib2)
 LIBS      := $(shell $(PKG_CONFIG) --libs gdk-2.0 imlib2) -lX11 -lXext -lgio-2.0
-
-# [as] thinks that this is not portable enough:
-# [lc] I use a virtual screen of 1600x1200, and the resolution is 1024x768,
-# so I changed (in main.c) how screen_[x,y] is obtained; it seems that gtk
-# 1.2 cannot give the geometry of viewport, so I borrowed from the source
-# of xvidtune the code for calling XF86VidModeGetModeLine, this requires
-# the linking option -lXxf86vm.
-#LIBS      += -lXxf86vm
 
 PROGRAM   = qiv
 OBJS      = main.o image.o event.o options.o utils.o xmalloc.o
@@ -146,20 +146,11 @@ install: $(PROGRAM)
 	fi
 	install -m 0644 $(PROGRAM).1 $(PREFIX)/share/man/man1
 	$(COMPRESS_PROG) $(PREFIX)/share/man/man1/$(PROGRAM).1
-	@if [ ! -e $(PREFIX)/share/pixmaps ]; then \
-	  echo install -d -m 0755 $(PREFIX)/share/pixmaps; \
-	  install -d -m 0755 $(PREFIX)/share/pixmaps; \
-	fi
-	install -m 0644 qiv.png $(PREFIX)/share/pixmaps/qiv.png
 	@if [ ! -e $(PREFIX)/share/applications ]; then \
 	  echo install -d -m 0755 $(PREFIX)/share/applications; \
 	  install -d -m 0755 $(PREFIX)/share/applications; \
 	fi
 	install -m 0644 qiv.desktop $(PREFIX)/share/applications/qiv.desktop
-	@if ./qiv -f ./intro.jpg ; \
-	then echo "-- Test Passed --" ; \
-	else echo "-- Test Failed --" ; \
-	fi
 	@echo "\nDont forget to look into the \"qiv-command\" file and install it!\n-> cp qiv-command.example $(PREFIX)/bin/qiv-command\n\n"
 
 # the end... ;-)

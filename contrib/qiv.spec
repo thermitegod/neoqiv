@@ -65,11 +65,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
-%doc README Changelog README.COPYING README.INSTALL intro.jpg examples
+%doc README Changelog README.COPYING README.INSTALL examples
 %{_bindir}/qiv
 %{_mandir}/man1/qiv.1*
 %{_prefix}/share/applications/qiv.desktop
-%{_prefix}/share/pixmaps/qiv.png
 
 %changelog
 * Thu Oct 10 2017 Thomas Wiegner <wiegner@gmx.de> 2.3.2
