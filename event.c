@@ -449,13 +449,13 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
             if (vikeys)
             {
                 if (keyval == 'h')
-                    keyval = GDK_Left;
+                    keyval = GDK_KEY_Left;
                 else if (keyval == 'j')
-                    keyval = GDK_Down;
+                    keyval = GDK_KEY_Down;
                 else if (keyval == 'k')
-                    keyval = GDK_Up;
+                    keyval = GDK_KEY_Up;
                 else if (keyval == 'l')
-                    keyval = GDK_Right;
+                    keyval = GDK_KEY_Right;
                 else
                     switch (keyval)
                     {
