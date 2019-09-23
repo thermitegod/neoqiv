@@ -86,7 +86,6 @@ int cms_transform = 0;
 /* Used for the ? key */
 
 const char *helpstrs[] = {
-    VERSION_FULL,
     "",
     "space/left mouse/wheel down      next picture",
     "backspace/right mouse/wheel up   previous picture",

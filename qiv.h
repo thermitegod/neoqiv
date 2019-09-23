@@ -8,8 +8,7 @@
 #include <lcms2.h>
 #endif
 
-#define VERSION "2.3.3pre"
-#define VERSION_FULL "QIV - Quick Image Viewer v2.3.3pre - http://qiv.spiegl.de/"
+#define VERSION "0.0.0"
 #define TRASH_DIR ".qiv-trash"
 #define SELECT_DIR ".qiv-select"
 #define SLIDE_DELAY 3000 // milliseconds
