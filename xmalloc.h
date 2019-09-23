@@ -1,5 +1,5 @@
 /* xmalloc.h - Header for do-or-die memory management functions.
- * 
+ *
  * Created by Kevin Locke (to accompany xmalloc.c)
  *
  * I hereby place this file in the public domain.  It may be freely reproduced,
