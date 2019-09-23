@@ -1,9 +1,3 @@
-/*
-  Up to release 1.3 of imlib2 there is a problem with the includes.
-  Imlib2.h does not load Xlib.h.
-  Workaround: add the following line:
-#include <X11/Xlib.h>
-*/
 #include <Imlib2.h>
 #include <ctype.h>
 #include <gdk/gdk.h>
@@ -13,18 +7,6 @@
 #include <jpeglib.h>
 #include <lcms2.h>
 #endif
-
-/*
-  // [as] thinks that this is not portable enough
-  // [lc]
-  // I use a virtual screen of 1600x1200, and the resolution is 1024x768,
-  // so I changed how screen_[x,y] is obtained; it seems that gtk 1.2
-  // cannot give the geometry of viewport, so I borrowed from the source of
-  // xvidtune the code for calling XF86VidModeGetModeLine, this requires
-  // the linking option -lXxf86vm.
-#include <X11/Xlib.h>
-#include <X11/extensions/xf86vmode.h> // for XF86VidModeGetModeLine
-*/
 
 #define VERSION "2.3.3pre"
 #define VERSION_FULL "QIV - Quick Image Viewer v2.3.3pre - http://qiv.spiegl.de/"

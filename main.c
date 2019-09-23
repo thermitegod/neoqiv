@@ -43,22 +43,6 @@ int main(int argc, char **argv)
     struct timeval tv;
     int i;
 
-    // [as] workaround for problem with X composite extension
-    // is this still needed with imlib2 ??
-    putenv("XLIB_SKIP_ARGB_VISUALS=1");
-
-    /*
-      // [as] thinks that this is not portable enough
-      // [lc]
-      // I use a virtual screen of 1600x1200, and the resolution is 1024x768,
-      // so I changed how screen_[x,y] is obtained; it seems that gtk 1.2
-      // cannot give the geometry of viewport, so I borrowed from the source of
-      // xvidtune the code for calling XF86VidModeGetModeLine, this requires
-      // the linking option -lXxf86vm.
-      XF86VidModeModeLine modeline;
-      int dot_clock;
-    */
-
     /* Randomize seed for 'true' random */
     gettimeofday(&tv, NULL);
     srand(tv.tv_usec * 1000000 + tv.tv_sec);
