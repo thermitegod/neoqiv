@@ -478,7 +478,7 @@ void options_read(int argc, char **argv, qiv_image *q)
         if (need_sort)
             qsort(image_names, images, sizeof *image_names, my_strcmp);
         image_idx = find_image(images, image_names, tmp);
-        free(tmp);
+        xfree(tmp);
     }
     else
     {

@@ -95,7 +95,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
         pb_w = gdk_pixbuf_get_width(pixbuf);
         pb_h = gdk_pixbuf_get_height(pixbuf);
 
-        argbdata = malloc(4 * pb_w * pb_h);
+        argbdata = xmalloc(4 * pb_w * pb_h);
 
         /* create imlib2 compatible data */
         if (*has_alpha)
@@ -168,7 +168,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
             {
                 printf("qiv warning: %s contains corrupt color profile\n", image_name);
             }
-            free(icc_profile);
+            xfree(icc_profile);
         }
 
         /* do the color transform */
@@ -178,7 +178,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
         }
 #endif
         im = imlib_create_image_using_copied_data(pb_w, pb_h, (DATA32 *)argbdata);
-        free(argbdata);
+        xfree(argbdata);
         if (*has_alpha)
         {
             g_object_unref(pixbuf);

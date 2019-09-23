@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "xmalloc.h"
+
 #define STEP 3 // When using KP arrow, number of step for seeing all the image.
 
 static int jumping;
@@ -519,10 +521,10 @@ void qiv_handle_event(GdkEvent *ev, gpointer data)
                     /* free all the mem malloc'ed by get_exif_values func */
                     while (*(lines + i) != NULL)
                     {
-                        free(*(lines + i));
+                        xfree(*(lines + i));
                         i++;
                     }
-                    free(lines);
+                    xfree(lines);
                 }
             }
             break;

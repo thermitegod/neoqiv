@@ -1,15 +1,16 @@
 /* xmalloc.c - Do-or-die Memory management functions.
  *
- * Created by Kevin Locke (from numerous canonical examples)
+ * based on:
+ * https://github.com/openssh/openssh-portable/blob/master/xmalloc.c
  *
- * I hereby place this file in the public domain.  It may be freely reproduced,
- * distributed, used, modified, built upon, or otherwise employed by anyone
- * for any purpose without restriction.
+ * goto commits before c5f3fadc4930a68efb5661fa4f747c4bd9329bb0 for orig version
+ *
  */
 
-#include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifndef EXIT_SUCCESS
 #define EXIT_SUCCESS 0
@@ -18,70 +19,89 @@
 
 void *xmalloc(size_t size)
 {
-    void *allocated = malloc(size);
+    void *ptr;
 
-    if (allocated == NULL)
+    if (size == 0)
     {
-        fprintf(stderr,
-                "Error:  Insufficient memory "
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
-                "(attempt to malloc %zu bytes)\n",
-#else
-                "(attempt to malloc %u bytes)\n",
-#endif
-                (unsigned int)size);
+        fprintf(stderr, "xmalloc: zero size");
         exit(EXIT_FAILURE);
     }
-
-    return allocated;
+    ptr = malloc(size);
+    if (ptr == NULL)
+    {
+        fprintf(stderr, "xmalloc: out of memory (allocating %zu bytes)", size);
+        exit(EXIT_FAILURE);
+    }
+    return ptr;
 }
 
-void *xcalloc(size_t num, size_t size)
+void *xcalloc(size_t nmemb, size_t size)
 {
-    void *allocated = calloc(num, size);
+    void *ptr;
 
-    if (allocated == NULL)
+    if (size == 0 || nmemb == 0)
     {
-        fprintf(stderr,
-                "Error:  Insufficient memory "
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
-                "(attempt to calloc %zu bytes)\n",
-#else
-                "(attempt to calloc %u bytes)\n",
-#endif
-                (unsigned int)size);
+        fprintf(stderr, "xcalloc: zero size");
         exit(EXIT_FAILURE);
     }
-
-    return allocated;
+    if (SIZE_MAX / nmemb < size)
+    {
+        fprintf(stderr, "xcalloc: nmemb * size > SIZE_MAX");
+        exit(EXIT_FAILURE);
+    }
+    ptr = calloc(nmemb, size);
+    if (ptr == NULL)
+    {
+        fprintf(stderr, "xcalloc: out of memory (allocating %zu bytes)", size * nmemb);
+        exit(EXIT_FAILURE);
+    }
+    return ptr;
 }
 
 void *xrealloc(void *ptr, size_t size)
 {
-    void *allocated;
+    void *new_ptr;
 
-    /* Protect against non-standard behavior */
+    if (size == 0)
+    {
+        fprintf(stderr, "xrealloc: zero size");
+        exit(EXIT_FAILURE);
+    }
     if (ptr == NULL)
     {
-        allocated = malloc(size);
+        new_ptr = malloc(size);
     }
     else
     {
-        allocated = realloc(ptr, size);
+        new_ptr = realloc(ptr, size);
     }
 
-    if (allocated == NULL)
+    if (new_ptr == NULL)
     {
-        fprintf(stderr,
-                "Error:  Insufficient memory "
-#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
-                "(attempt to realloc %zu bytes)\n",
-#else
-                "(attempt to realloc %u bytes)\n",
-#endif
-                (unsigned int)size);
+        fprintf(stderr, "xrealloc: out of memory (allocating %lu bytes)", size);
         exit(EXIT_FAILURE);
     }
 
-    return allocated;
+    return new_ptr;
+}
+
+void xfree(void *ptr)
+{
+    if (ptr == NULL)
+    {
+        fprintf(stderr, "xfree: NULL pointer given as argument\n");
+        exit(EXIT_FAILURE);
+    }
+    free(ptr);
+}
+
+char *xstrdup(const char *str)
+{
+    size_t len;
+    char *cp;
+
+    len = strlen(str) + 1;
+    cp = xmalloc(len);
+    strncpy(cp, str, len);
+    return cp;
 }
