@@ -1,0 +1,6 @@
+
+*.o
+qiv
+test-imgs/
+
+build.sh
