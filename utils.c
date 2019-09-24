@@ -16,7 +16,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <tiffio.h>
 #include <unistd.h>
 
 #include <X11/extensions/dpms.h>

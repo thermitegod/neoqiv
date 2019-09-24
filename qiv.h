@@ -3,9 +3,11 @@
 #include <gdk/gdk.h>
 #include <stdlib.h>
 #include <unistd.h>
+
 #ifdef SUPPORT_LCMS
 #include <jpeglib.h>
 #include <lcms2.h>
+#include <tiffio.h>
 #endif
 
 #define VERSION "0.0.0"
