@@ -8,7 +8,6 @@
 */
 
 #include "qiv.h"
-#include "qiv_icon.h"
 #include <gdk/gdkx.h>
 #include <stdio.h>
 #include <string.h>
