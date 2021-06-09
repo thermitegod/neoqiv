@@ -314,7 +314,7 @@ void options_read(int argc, char **argv, qiv_image *q)
             followlinks = 1;
             break;
         case 'v':
-            g_print("qiv (Quick Image Viewer) v%s\n", VERSION);
+            g_print("%s (Quick Image Viewer) v%s\n", PACKAGE_NAME, PACKAGE_VERSION);
             gdk_exit(0);
             break;
         case 'w':

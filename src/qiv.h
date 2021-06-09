@@ -10,7 +10,6 @@
 #include <tiffio.h>
 #endif
 
-#define VERSION "0.0.0"
 #define TRASH_DIR ".qiv-trash"
 #define SELECT_DIR ".qiv-select"
 #define SLIDE_DELAY 3000 // milliseconds

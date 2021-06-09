@@ -532,10 +532,10 @@ int checked_atoi(const char *s)
 
 void usage(char *name, int exit_status)
 {
-    g_print("qiv (Quick Image Viewer) v%s\n"
+    g_print("%s (Quick Image Viewer) v%s\n"
             "Usage: qiv [options] files ...\n"
             "See 'man qiv' or type 'qiv --help' for options.\n",
-            VERSION);
+            PACKAGE_NAME, PACKAGE_VERSION);
 
     gdk_exit(exit_status);
 }
@@ -544,9 +544,9 @@ void show_help(char *name, int exit_status)
 {
     int i;
 
-    g_print("qiv (Quick Image Viewer) v%s\n"
+    g_print("%s (Quick Image Viewer) v%s\n"
             "Usage: qiv [options] files ...\n\n",
-            VERSION);
+            PACKAGE_NAME, PACKAGE_VERSION);
 
     g_print(
         "General options:\n"
