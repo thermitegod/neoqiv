@@ -1,6 +1,6 @@
 project(
   'neo-qiv', 'c',
-  version : '0.0.0',
+  version : '3.0.0',
   license : 'GPL2',
   default_options : [
       'warning_level=1',
