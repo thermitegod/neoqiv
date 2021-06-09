@@ -1127,6 +1127,11 @@ char **get_exif_values(char *filename)
 }
 #endif
 
+#if 0
+// meson
+// undefined reference to symbol 'DPMS*'
+
+
 /* The state of DPMS is checked at startup of qiv.
    If the display is DPMS capable and DPMS is activated, qiv disables
    it during a slideshow to prevent the screen from blanking. */
@@ -1162,3 +1167,17 @@ void dpms_disable()
         DPMSDisable(GDK_DISPLAY());
     }
 }
+#else
+
+void dpms_check()
+{
+}
+
+void dpms_enable()
+{
+}
+
+void dpms_disable()
+{
+}
+#endif
