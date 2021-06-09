@@ -24,7 +24,7 @@ FILTER = 1
 # skipped.) It should reflect whatever is compiled into imlib.
 # The latest version of imlib has removed imagemagick fallback support,
 # so some extensions (XBM TGA) have been removed.
-EXTNS = GIF TIFF XPM PNG PPM PNM PGM PCX BMP EIM JPEG SVG WMF ICO
+EXTNS = GIF TIFF XPM PNG PPM PNM PGM PCX BMP EIM JPEG JPEG_XL SVG WMF ICO
 
 # This program will be run on the manual page after it is installed.
 # If you don't want to compress the manpage, change it to 'true'.

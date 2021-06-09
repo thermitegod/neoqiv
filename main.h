@@ -150,7 +150,10 @@ const char **helpkeys = helpstrs + 2;
 
 const char *image_extensions[] = {
 #ifdef EXTN_JPEG
-    ".jpg", ".jpeg",  ".jpe",
+    ".jpg", ".jpeg", ".jpe",
+#endif
+#ifdef EXTN_JPEG_XL
+    ".jxl",
 #endif
 #ifdef EXTN_GIF
     ".gif",
@@ -200,6 +203,12 @@ const char *image_extensions[] = {
 const char *image_magic[] = {
 #ifdef EXTN_JPEG
     "JPEG image data",
+#endif
+#ifdef EXTN_JPEG_XL
+    "JPEG XL codestream",
+    "JPEG XL container",
+    "JPEG-XR",
+    "JPEG XL image data",
 #endif
 #ifdef EXTN_GIF
     "GIF image data",
