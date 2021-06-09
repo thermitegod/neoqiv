@@ -13,8 +13,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
 
 static void setup_win(qiv_image *);
 // static void setup_magnify(qiv_image *, qiv_mgl *); // [lc]

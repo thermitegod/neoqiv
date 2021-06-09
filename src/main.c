@@ -9,10 +9,8 @@
 
 #include <gdk/gdkx.h>
 #include <signal.h>
-#include <stdio.h>
 #include <sys/time.h>
 
-#include <ctype.h>
 #include <string.h>
 
 #ifdef HAVE_MAGIC
