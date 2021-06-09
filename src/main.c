@@ -102,7 +102,7 @@ int main(int argc, char **argv)
 
     /* Load things from GDK/Imlib */
 
-    qiv_main_loop = g_main_new(TRUE);
+    qiv_main_loop = g_main_loop_new(NULL, TRUE);
     cmap = gdk_colormap_get_system();
     screen_x = gdk_screen_width();
     screen_y = gdk_screen_height();
@@ -199,7 +199,7 @@ int main(int argc, char **argv)
         g_timeout_add_full(G_PRIORITY_DEFAULT_IDLE, 100, qiv_watch_file, &main_img, NULL);
     }
 
-    g_main_run(qiv_main_loop); /* will never return */
+    g_main_loop_run(qiv_main_loop); /* will never return */
     return 0;
 }
 
@@ -214,7 +214,7 @@ void qiv_exit(int code)
     g_object_unref(layout);
     pango_font_metrics_unref(metrics);
 
-    g_main_destroy(qiv_main_loop);
+    g_main_loop_unref(qiv_main_loop);
     finish(SIGTERM); /* deprecated, subject to change */
 }
 
