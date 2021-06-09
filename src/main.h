@@ -149,98 +149,52 @@ const char **helpkeys = helpstrs + 2;
 /* Used for filtering */
 
 const char *image_extensions[] = {
-#ifdef EXTN_JPEG
     ".jpg", ".jpeg", ".jpe",
-#endif
-#ifdef EXTN_JPEG_XL
     ".jxl",
-#endif
-#ifdef EXTN_GIF
     ".gif",
-#endif
-#ifdef EXTN_TIFF
     ".tif", ".tiff",
-#endif
-#ifdef EXTN_XPM
     ".xpm",
-#endif
-#ifdef EXTN_PNG
     ".png", ".pjpeg",
-#endif
-#ifdef EXTN_PPM
-    ".ppm",
-#endif
-#ifdef EXTN_PNM
-    ".pnm",
-#endif
-#ifdef EXTN_PGM
-    ".pgm", ".pbm",
-#endif
-#ifdef EXTN_PCX
+    ".ppm", ".pnm", ".pgm", ".pbm",
     ".pcx",
-#endif
-#ifdef EXTN_BMP
     ".bmp",
-#endif
-#ifdef EXTN_EIM
     ".eim",
-#endif
-#ifdef EXTN_TGA
     ".tga",
-#endif
-#ifdef EXTN_ICO
     ".ico",
-#endif
-#ifdef EXTN_WMF
     ".wmf",
-#endif
-#ifdef EXTN_SVG
     ".svg",
-#endif
     NULL};
 
 #ifdef HAVE_MAGIC
 const char *image_magic[] = {
-#ifdef EXTN_JPEG
+    // jpeg
     "JPEG image data",
-#endif
-#ifdef EXTN_JPEG_XL
+    // jpeg xl
     "JPEG XL codestream",
     "JPEG XL container",
     "JPEG-XR",
     "JPEG XL image data",
-#endif
-#ifdef EXTN_GIF
+    // gif
     "GIF image data",
-#endif
-#ifdef EXTN_TIFF
+    // tiff
     "TIFF image data",
-#endif
-#ifdef EXTN_XPM
+    // xpm
     "X pixmap image",
-#endif
-#ifdef EXTN_PNG
+    // png
     "PNG image data",
-#endif
-#ifdef EXTN_PGM
+    // pgm
     "Netpbm PBM",
     "Netpbm PPM",
-#endif
-#ifdef EXTN_BMP
+    // bpm
     "PC bitmap data",
-#endif
-#ifdef EXTN_TGA
+    // tga
     "Targa image data",
-#endif
-#ifdef EXTN_PCX
+    // pcx
     "PCX ver. 3.0 image",
-#endif
-#ifdef EXTN_SVG
+    // svg
     "SVG Scalable Vector",
-#endif
-#ifdef EXTN_ICO
+    // ico
     "MS Windows icon resource",
-#endif
     NULL};
 #endif
 

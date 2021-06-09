@@ -1,0 +1,19 @@
+#preprocessor
+option(
+  'magic',
+  type : 'boolean',
+  value : true,
+  description : 'Read image magic',
+)
+option(
+  'lcms',
+  type : 'boolean',
+  value : true,
+  description : 'Support LCMS',
+)
+option(
+  'exif',
+  type : 'boolean',
+  value : true,
+  description : 'Read image EXIF',
+)
