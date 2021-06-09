@@ -78,7 +78,6 @@ sources = [
   'src/main.c',
   'src/options.c',
   'src/utils.c',
-  'src/xmalloc.c',
 ]
 
 target_name = 'qiv'

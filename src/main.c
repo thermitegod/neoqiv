@@ -19,8 +19,6 @@
 #include <magic.h>
 #endif
 
-#include "xmalloc.h"
-
 #include "qiv.h"
 
 #include "main.h"
@@ -109,7 +107,7 @@ int main(int argc, char **argv)
 
     screen = gdk_screen_get_default();
     num_monitors = gdk_screen_get_n_monitors(screen);
-    monitor = xmalloc(num_monitors * sizeof(GdkRectangle));
+    monitor = malloc(num_monitors * sizeof(GdkRectangle));
     for (i = 0; i < num_monitors; i++)
     {
         gdk_screen_get_monitor_geometry(screen, i, &monitor[i]);

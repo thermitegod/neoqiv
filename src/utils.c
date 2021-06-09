@@ -25,7 +25,6 @@
 #endif
 
 #include "qiv.h"
-#include "xmalloc.h"
 
 #ifdef STAT_MACROS_BROKEN
 #undef S_ISDIR
@@ -104,15 +103,15 @@ int move2trash()
         qiv_deletedfile *del;
 
         if (!deleted_files)
-            deleted_files = (qiv_deletedfile *)xcalloc(MAX_DELETE, sizeof *deleted_files);
+            deleted_files = (qiv_deletedfile *)calloc(MAX_DELETE, sizeof *deleted_files);
 
         del = &deleted_files[delete_idx++];
         if (delete_idx == MAX_DELETE)
             delete_idx = 0;
         if (del->filename)
-            xfree(del->trashfile);
+            free(del->trashfile);
         del->filename = filename;
-        del->trashfile = xstrdup(trashfile);
+        del->trashfile = strdup(trashfile);
         del->pos = image_idx;
 
         --images;
@@ -278,7 +277,7 @@ int undelete_image()
     {
         g_print("Error: undelete_image '%s' failed\a\n", del->filename);
         del->filename = NULL;
-        xfree(del->trashfile);
+        free(del->trashfile);
         return 1;
     }
 
@@ -301,7 +300,7 @@ int undelete_image()
     images++;
     image_names[image_idx] = del->filename;
     del->filename = NULL;
-    xfree(del->trashfile);
+    free(del->trashfile);
 
     return 0;
 }
@@ -324,7 +323,7 @@ void run_command(qiv_image *q, char *n, char *filename, int *numlines, const cha
     stat(filename, &before);
 
     if (!buffer)
-        buffer = xmalloc(MAXOUTPUTBUFFER + 1);
+        buffer = malloc(MAXOUTPUTBUFFER + 1);
 
     *numlines = 0;
     *output = lines;
@@ -401,15 +400,15 @@ void run_command(qiv_image *q, char *n, char *filename, int *numlines, const cha
      * indicating that the filename has changed */
     if (lines[0] && strncmp(lines[0], "NEWNAME=", 8) == 0)
     {
-        newfilename = xstrdup(lines[0]);
+        newfilename = strdup(lines[0]);
         newfilename += 8;
 #ifdef DEBUG
         g_print("*** filename has changed from: '%s' to '%s'\n", image_names[image_idx],
                 newfilename);
 #endif
 
-        image_names[image_idx] = xstrdup(newfilename);
-        filename = xstrdup(newfilename);
+        image_names[image_idx] = strdup(newfilename);
+        filename = strdup(newfilename);
 
         /* delete this line from the output */
         (*numlines)--;
@@ -637,7 +636,7 @@ int get_random(int replace, int num, int direction)
     int n, m, p, q;
 
     if (!rindices)
-        rindices = (int *)xmalloc((unsigned)max_rand_num * sizeof(int));
+        rindices = (int *)malloc((unsigned)max_rand_num * sizeof(int));
     if (rsize != num)
     {
         rsize = num;
@@ -700,12 +699,12 @@ int rreaddir(const char *dirname, int recursive)
                 {
                     max_image_cnt += 8192;
                     if (!image_names)
-                        image_names = (char **)xmalloc(max_image_cnt * sizeof(char *));
+                        image_names = (char **)malloc(max_image_cnt * sizeof(char *));
                     else
                         image_names =
-                            (char **)xrealloc(image_names, max_image_cnt * sizeof(char *));
+                            (char **)realloc(image_names, max_image_cnt * sizeof(char *));
                 }
-                image_names[images++] = xstrdup(name);
+                image_names[images++] = strdup(name);
             }
         }
     }
@@ -732,7 +731,7 @@ int rreadfile(const char *filename)
     if (!images)
     {
         max_image_cnt = 8192;
-        image_names = (char **)xmalloc(max_image_cnt * sizeof(char *));
+        image_names = (char **)malloc(max_image_cnt * sizeof(char *));
     }
 
     while (1)
@@ -760,9 +759,9 @@ int rreadfile(const char *filename)
             if (images >= max_image_cnt)
             {
                 max_image_cnt += 8192;
-                image_names = (char **)xrealloc(image_names, max_image_cnt * sizeof(char *));
+                image_names = (char **)realloc(image_names, max_image_cnt * sizeof(char *));
             }
-            image_names[images++] = xstrdup(line);
+            image_names[images++] = strdup(line);
         }
     }
     return images - before_count;
@@ -892,7 +891,7 @@ char *get_icc_profile(char *filename)
     jpeg_prog = 0;
     if (comment)
     {
-        xfree(comment);
+        free(comment);
         comment = NULL;
     }
 
@@ -923,8 +922,8 @@ char *get_icc_profile(char *filename)
                 if (i == 0)
                 {
                     seq_max = marker->data[13];
-                    tag_length = xcalloc(seq_max, sizeof(short));
-                    tag_ptr = xcalloc(seq_max, sizeof(char *));
+                    tag_length = calloc(seq_max, sizeof(short));
+                    tag_ptr = calloc(seq_max, sizeof(char *));
                 }
                 // hmm, in theory both should be the same (tw)
                 tag_length[marker->data[12] - 1] = marker->data_length - 14;
@@ -938,7 +937,7 @@ char *get_icc_profile(char *filename)
             /* copy jpeg comment here to be printed out when exif data is displayed. */
             else if (marker->marker == JPEG_COM)
             {
-                comment = xcalloc(1 + marker->data_length, 1);
+                comment = calloc(1 + marker->data_length, 1);
                 if (comment == NULL)
                     return NULL;
                 strncpy(comment, (char *)marker->data, marker->data_length);
@@ -965,7 +964,7 @@ char *get_icc_profile(char *filename)
             {
                 length += tag_length[j];
             }
-            icc_ptr = xmalloc(length + sizeof(length));
+            icc_ptr = malloc(length + sizeof(length));
             if (icc_ptr == NULL)
                 return NULL;
             *(unsigned int *)icc_ptr = length;
@@ -975,8 +974,8 @@ char *get_icc_profile(char *filename)
                 memcpy(icc_ptr + length + sizeof(length), tag_ptr[j], tag_length[j]);
                 length += tag_length[j];
             }
-            xfree(tag_ptr);
-            xfree(tag_length);
+            free(tag_ptr);
+            free(tag_length);
         }
         jpeg_destroy_decompress(&cinfo);
         return icc_ptr;
@@ -997,7 +996,7 @@ char *get_icc_profile(char *filename)
         if (TIFFGetField(tiff_image, TIFFTAG_ICCPROFILE, &count, &data))
         {
             length = count;
-            icc_ptr = xmalloc(length + sizeof(length));
+            icc_ptr = malloc(length + sizeof(length));
             *(unsigned int *)icc_ptr = length;
             memcpy(icc_ptr + sizeof(length), data, length);
         }
@@ -1065,13 +1064,13 @@ char **get_exif_values(char *filename)
     {
         /* one too much to make sure the last one will allways be NULL
            size of tags + gpstags(3) + extra lines(3) + 1 */
-        exif_lines = xcalloc(sizeof(tags) / sizeof(tags[0]), sizeof(char *) + 3 + 3 + 1);
+        exif_lines = calloc(sizeof(tags) / sizeof(tags[0]), sizeof(char *) + 3 + 3 + 1);
         for (i = 0; i < sizeof(tags) / sizeof(tags[0]); i++)
         {
             entry = exif_content_get_entry(ed->ifd[tags[i].ifd], tags[i].tag);
             if (entry)
             {
-                line = xmalloc(256);
+                line = malloc(256);
                 exif_entry_get_value(entry, buffer, 255);
                 snprintf(line, 255, "%-21s: %s\n",
                          exif_tag_get_name_in_ifd(tags[i].tag, tags[i].ifd), buffer);
@@ -1084,7 +1083,7 @@ char **get_exif_values(char *filename)
             entry = exif_content_get_entry(ed->ifd[EXIF_IFD_GPS], gps_tags[i]);
             if (entry)
             {
-                line = xmalloc(256);
+                line = malloc(256);
                 exif_entry_get_value(entry, buffer, 255);
                 if ((entry = exif_content_get_entry(ed->ifd[EXIF_IFD_GPS], i + 1)))
                 {
@@ -1104,21 +1103,21 @@ char **get_exif_values(char *filename)
     }
     if (j == 0)
     {
-        xfree(exif_lines);
+        free(exif_lines);
         return NULL;
     }
-    line = xmalloc(64);
+    line = malloc(64);
     snprintf(line, 63, "%-21s: %i Bytes\n", "FileSize", (int)file_size);
     exif_lines[j++] = line;
     if (jpeg_prog)
     {
-        line = xmalloc(64);
+        line = malloc(64);
         snprintf(line, 63, "%-21s: %s\n", "JpegProcess", "Progressive");
         exif_lines[j++] = line;
     }
     if (comment)
     {
-        line = xmalloc(256);
+        line = malloc(256);
         snprintf(line, 255, "%-21s: %s\n", "Comment", comment);
         exif_lines[j++] = line;
     }

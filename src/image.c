@@ -9,7 +9,6 @@
 
 #include "qiv.h"
 #include "qiv_icon.h"
-#include "xmalloc.h"
 #include <gdk/gdkx.h>
 #include <stdio.h>
 #include <string.h>
@@ -95,7 +94,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
         pb_w = gdk_pixbuf_get_width(pixbuf);
         pb_h = gdk_pixbuf_get_height(pixbuf);
 
-        argbdata = xmalloc(4 * pb_w * pb_h);
+        argbdata = malloc(4 * pb_w * pb_h);
 
         /* create imlib2 compatible data */
         if (*has_alpha)
@@ -168,7 +167,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
             {
                 printf("qiv warning: %s contains corrupt color profile\n", image_name);
             }
-            xfree(icc_profile);
+            free(icc_profile);
         }
 
         /* do the color transform */
@@ -178,7 +177,7 @@ Imlib_Image im_from_pixbuf_loader(char *image_name, int *has_alpha)
         }
 #endif
         im = imlib_create_image_using_copied_data(pb_w, pb_h, (DATA32 *)argbdata);
-        xfree(argbdata);
+        free(argbdata);
         if (*has_alpha)
         {
             g_object_unref(pixbuf);
@@ -448,7 +447,7 @@ void set_desktop_image(qiv_image *q)
         else
         {
             GdkGC *rootGC;
-            buffer = xcalloc(1, screen_x * screen_y * gdk_visual_get_depth(gvis) / 8);
+            buffer = calloc(1, screen_x * screen_y * gdk_visual_get_depth(gvis) / 8);
             rootGC = gdk_gc_new(root_win);
             temp = gdk_pixmap_create_from_data(root_win, buffer, screen_x, screen_y,
                                                gdk_visual_get_depth(gvis), &image_bg, &image_bg);

@@ -7,7 +7,6 @@
 */
 
 #include "qiv.h"
-#include "xmalloc.h"
 #include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
@@ -425,7 +424,7 @@ void options_read(int argc, char **argv, qiv_image *q)
         if (!images)
         {
             max_image_cnt = 8192;
-            image_names = (char **)xmalloc(max_image_cnt * sizeof(char *));
+            image_names = (char **)malloc(max_image_cnt * sizeof(char *));
         }
         while (cnt-- > 0)
         {
@@ -438,7 +437,7 @@ void options_read(int argc, char **argv, qiv_image *q)
                 if (images >= max_image_cnt)
                 {
                     max_image_cnt += 8192;
-                    image_names = (char **)xrealloc(image_names, max_image_cnt * sizeof(char *));
+                    image_names = (char **)realloc(image_names, max_image_cnt * sizeof(char *));
                 }
                 image_names[images++] = argv[optind++];
             }
@@ -461,7 +460,7 @@ void options_read(int argc, char **argv, qiv_image *q)
     if (browse && images)
     {
         images = 0; /* avoid displaying same filename twice */
-        char *tmp = (char *)xmalloc(strlen(image_names[0]) + 3);
+        char *tmp = (char *)malloc(strlen(image_names[0]) + 3);
         if (strchr(image_names[0], '/') == NULL)
         {
             *tmp = '.';
@@ -478,7 +477,7 @@ void options_read(int argc, char **argv, qiv_image *q)
         if (need_sort)
             qsort(image_names, images, sizeof *image_names, my_strcmp);
         image_idx = find_image(images, image_names, tmp);
-        xfree(tmp);
+        free(tmp);
     }
     else
     {
