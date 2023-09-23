@@ -163,6 +163,7 @@ const char *image_extensions[] = {
     ".ico",
     ".wmf",
     ".svg",
+    ".webp",
     NULL};
 
 #ifdef HAVE_MAGIC
